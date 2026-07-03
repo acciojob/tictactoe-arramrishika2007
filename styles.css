@@ -1,40 +1,30 @@
-body{
-    font-family:Arial,sans-serif;
-    text-align:center;
+.container {
+    text-align: center;
+    margin-top: 30px;
 }
 
-.container{
-    margin-top:30px;
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+    gap: 5px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-input{
-    padding:10px;
-    margin:10px;
+.cell {
+    border: 2px solid black;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
 }
 
-button{
-    padding:10px 20px;
-    cursor:pointer;
-}
-
-.message{
-    font-size:22px;
-    margin:20px;
-}
-
-#board{
-    width:306px;
-    margin:20px auto;
-    display:grid;
-    grid-template-columns:repeat(3,100px);
-    grid-template-rows:repeat(3,100px);
-}
-
-.cell{
-    border:1px solid #000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:40px;
-    cursor:pointer;
+.message {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: bold;
 }

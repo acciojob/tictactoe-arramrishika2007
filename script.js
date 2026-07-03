@@ -1,21 +1,16 @@
-//your JS code here. If required.
 const submit = document.getElementById("submit");
-const start = document.getElementById("start");
+const form = document.getElementById("player-form");
 const game = document.getElementById("game");
-
-const p1Input = document.getElementById("player-1");
-const p2Input = document.getElementById("player-2");
-
 const message = document.querySelector(".message");
-const cells = document.querySelectorAll(".cell");
 
 let player1 = "";
 let player2 = "";
+let currentPlayer = "";
+let currentSymbol = "X";
 
-let current = "X";
-let board = Array(9).fill("");
+const board = Array(9).fill("");
 
-const wins = [
+const winPatterns = [
     [0,1,2],
     [3,4,5],
     [6,7,8],
@@ -26,59 +21,58 @@ const wins = [
     [2,4,6]
 ];
 
-submit.addEventListener("click", () => {
+submit.addEventListener("click", function () {
+    player1 = document.getElementById("player-1").value.trim();
+    player2 = document.getElementById("player-2").value.trim();
 
-    player1 = p1Input.value.trim();
-    player2 = p2Input.value.trim();
+    if (!player1 || !player2) return;
 
-    if(player1==="" || player2==="") return;
+    form.style.display = "none";
+    game.style.display = "block";
 
-    start.style.display="none";
-    game.style.display="block";
+    currentPlayer = player1;
+    currentSymbol = "X";
 
-    message.textContent=`${player1}, you're up`;
+    message.textContent = `${currentPlayer}, you're up`;
 });
 
-cells.forEach((cell,index)=>{
+document.querySelectorAll(".cell").forEach((cell, index) => {
+    cell.addEventListener("click", function () {
 
-    cell.addEventListener("click",()=>{
+        if (board[index] !== "") return;
 
-        if(board[index]!=="" || checkWinner()) return;
+        board[index] = currentSymbol;
+        cell.textContent = currentSymbol;
 
-        board[index]=current;
-        cell.textContent=current;
-
-        if(checkWinner()){
-
-            const winner=current==="X"?player1:player2;
-            message.textContent=`${winner} congratulations you won!`;
+        if (checkWinner()) {
+            message.textContent = `${currentPlayer} congratulations you won!`;
             return;
         }
 
-        current=current==="X"?"O":"X";
+        if (board.every(x => x !== "")) {
+            message.textContent = "It's a draw!";
+            return;
+        }
 
-        message.textContent=current==="X"
-        ?`${player1}, you're up`
-        :`${player2}, you're up`;
+        if (currentPlayer === player1) {
+            currentPlayer = player2;
+            currentSymbol = "O";
+        } else {
+            currentPlayer = player1;
+            currentSymbol = "X";
+        }
 
+        message.textContent = `${currentPlayer}, you're up`;
     });
-
 });
 
-function checkWinner(){
-
-    for(let combo of wins){
-
-        const [a,b,c]=combo;
-
-        if(
+function checkWinner() {
+    return winPatterns.some(pattern => {
+        const [a, b, c] = pattern;
+        return (
             board[a] &&
-            board[a]===board[b] &&
-            board[b]===board[c]
-        ){
-            return true;
-        }
-    }
-
-    return false;
+            board[a] === board[b] &&
+            board[b] === board[c]
+        );
+    });
 }
